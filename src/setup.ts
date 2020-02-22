@@ -29,7 +29,7 @@ export async function setupAndroid(version: string): Promise<void>{
   await exec.exec('sudo apt-get update');
   await exec.exec('sudo apt-get install -qqy ca-certificates curl apt-transport-https');
   await exec.exec('sudo apt-get install -qqy unzip python3-cffi lsb-release');
-  await exec.exec('sudo curl -sL https://firebase.tools | bash');  
+  await exec.exec('curl -sL https://firebase.tools | bash');  
 
   let lsbRelease : string = '';
   const  lsbReleaseObj = {} as Options;

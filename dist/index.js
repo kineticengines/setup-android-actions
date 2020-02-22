@@ -1338,7 +1338,7 @@ function setupAndroid(version) {
         yield exec.exec('sudo apt-get update');
         yield exec.exec('sudo apt-get install -qqy ca-certificates curl apt-transport-https');
         yield exec.exec('sudo apt-get install -qqy unzip python3-cffi lsb-release');
-        yield exec.exec('sudo curl -sL https://firebase.tools | bash');
+        yield exec.exec('curl -sL https://firebase.tools | bash');
         let lsbRelease = '';
         const lsbReleaseObj = {};
         lsbReleaseObj.listeners = {
