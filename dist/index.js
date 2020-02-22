@@ -1354,7 +1354,7 @@ function setupAndroid(version) {
         yield exec.exec('echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list');
         yield exec.exec(`bash -c "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output ${tempDirectory}/key.gpg "`);
         yield exec.exec(`sudo apt-key add ${tempDirectory}/key.gpg`);
-        yield exec.exec('sudo apt-get update && sudo apt-get install -y google-cloud-sdk');
+        yield exec.exec('bash -c "sudo apt-get update && sudo apt-get install -y google-cloud-sdk "');
         yield exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
         core.exportVariable('ANDROID_HOME', '/opt/android/sdk');
         core.exportVariable('SDK_VERSION', 'sdk-tools-linux-4333796.zip');
