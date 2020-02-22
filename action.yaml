@@ -1,0 +1,13 @@
+name: 'Android setup action'
+description: 'Android setup for Github Actions'
+author: 'Kinetic engines'
+inputs:
+  api-version:
+    description: 'The android api version to install'
+    required: false 
+runs:
+  using: 'node12'
+  main: 'lib/index.js'
+branding:
+  icon: 'maximize'
+  color: 'blue'
