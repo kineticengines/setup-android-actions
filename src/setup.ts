@@ -19,7 +19,7 @@ if (!tempDirectory) {
   }else{
     baseLocation = '/home';
   }
-  tempDirectory = path.join(baseLocation, 'actions', 'temp');
+  tempDirectory = path.join(baseLocation, 'actions');
 }
 
 interface Options { listeners: {} };
@@ -51,13 +51,13 @@ export async function setupAndroid(version: string): Promise<void>{
   await exec.exec('bash -c "sudo apt-get update && sudo apt-get install -y google-cloud-sdk "');
   await exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
   
-  core.exportVariable('ANDROID_HOME','/opt/android/sdk');
+  core.exportVariable('ANDROID_HOME',`${tempDirectory}/android/sdk`);
   core.exportVariable('SDK_VERSION','sdk-tools-linux-4333796.zip');
   core.exportVariable('ADB_INSTALL_TIMEOUT','120');
 
   await exec.exec('bash -c "sudo mkdir -p $ANDROID_HOME"');  
-  await exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output /tmp/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
-  await exec.exec(`bash -c "sudo unzip -q /tmp/$SDK_VERSION -d $ANDROID_HOME && sudo rm /tmp/$ANDROID_HOME"`);
+  await exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output ${tempDirectory}/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
+  await exec.exec(`bash -c "sudo unzip -q ${tempDirectory}/$SDK_VERSION -d $ANDROID_HOME && sudo rm -rf ${tempDirectory}/$SDK_VERSION "`);
  
   core.addPath('$ANDROID_HOME/emulator');
   core.addPath('$ANDROID_HOME/tools');
@@ -65,9 +65,9 @@ export async function setupAndroid(version: string): Promise<void>{
   core.addPath('$ANDROID_HOME/platform-tools');
 
   console.log('=== installing android ===');
-  await exec.exec(`bash -c "mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg"`)
+  await exec.exec(`bash -c "mkdir ${tempDirectory}/.android && echo '### User Sources for Android SDK Manager' > ${tempDirectory}/.android/repositories.cfg"`)
   await exec.exec(`bash -c "yes | sdkmanager --licenses && sdkmanager --update"`);  
   await exec.exec(`bash -c "sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
   await exec.exec(`bash -c "sdkmanager "build-tools;${version}.0.0" "`);
-  await exec.exec(`bash -c " sdkmanager "platforms;android-${version}" "`);  
+  await exec.exec(`bash -c "sdkmanager "platforms;android-${version}" "`);  
 }
