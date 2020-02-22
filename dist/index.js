@@ -1367,7 +1367,7 @@ function setupAndroid(version) {
         core.addPath('$ANDROID_HOME/tools/bin');
         core.addPath('$ANDROID_HOME/platform-tools');
         console.log('=== installing android SDK ===');
-        yield exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && echo '### User Sources for Android SDK Manager' > ${tempDirectory}/.android/repositories.cfg"`);
+        yield exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' > ${tempDirectory}/.android/repositories.cfg"`);
         yield exec.exec(`bash -c "yes | ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses && ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update"`);
         yield exec.exec(`bash -c "${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
         yield exec.exec(`bash -c "${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
