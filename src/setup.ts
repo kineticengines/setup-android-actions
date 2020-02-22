@@ -45,18 +45,18 @@ export async function setupAndroid(version: string): Promise<void>{
   core.exportVariable('CLOUD_SDK_REPO', `cloud-sdk-${lsbRelease}`);
 
   console.log('=== installing gcloud SDK ===');
-  await exec.exec('echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list');
-  await exec.exec('curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -');
+  await exec.exec('echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list');  
+  await exec.exec(`bash -c "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - "`);
   await exec.exec('sudo apt-get update && sudo apt-get install -y google-cloud-sdk');
-  await exec.exec('gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true');
+  await exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
   
   core.exportVariable('ANDROID_HOME','/opt/android/sdk');
   core.exportVariable('SDK_VERSION','sdk-tools-linux-4333796.zip');
   core.exportVariable('ADB_INSTALL_TIMEOUT','120');
 
-  await exec.exec('sudo mkdir -p $ANDROID_HOME');
-  await exec.exec('curl --silent --show-error --location --fail --retry 3 --output /tmp/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION');
-  await exec.exec('sudo unzip -q /tmp/$SDK_VERSION -d $ANDROID_HOME && sudo rm /tmp/$ANDROID_HOME');
+  await exec.exec('bash -c "sudo mkdir -p $ANDROID_HOME"');  
+  await exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output /tmp/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
+  await exec.exec(`bash -c "sudo unzip -q /tmp/$SDK_VERSION -d $ANDROID_HOME && sudo rm /tmp/$ANDROID_HOME"`);
  
   core.addPath('$ANDROID_HOME/emulator');
   core.addPath('$ANDROID_HOME/tools');
@@ -64,9 +64,9 @@ export async function setupAndroid(version: string): Promise<void>{
   core.addPath('$ANDROID_HOME/platform-tools');
 
   console.log('=== installing android ===');
-  await exec.exec(`mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg`);
-  await exec.exec('yes | sdkmanager --licenses && sdkmanager --update');
-  await exec.exec(`sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" `);
-  await exec.exec(`sdkmanager "build-tools;${version}.0.0" `);
-  await exec.exec(`sdkmanager "platforms;android-${version}"`);  
+  await exec.exec(`bash -c "mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg"`)
+  await exec.exec(`bash -c "yes | sdkmanager --licenses && sdkmanager --update"`);  
+  await exec.exec(`bash -c "sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
+  await exec.exec(`bash -c "sdkmanager "build-tools;${version}.0.0" "`);
+  await exec.exec(`bash -c " sdkmanager "platforms;android-${version}" "`);  
 }
