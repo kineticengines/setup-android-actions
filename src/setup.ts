@@ -27,7 +27,8 @@ interface Options { listeners: {} };
 export async function setupAndroid(version: string): Promise<void>{
   console.log('=== installing prerequisites ===');
   await exec.exec('sudo apt-get update');
-  await exec.exec('sudo apt-get install -qqy ca-certificates curl unzip python3-cffi apt-transport-https lsb-release');
+  await exec.exec('sudo apt-get install -qqy ca-certificates curl apt-transport-https');
+  await exec.exec('sudo apt-get install -qqy unzip python3-cffi lsb-release');
   await exec.exec('sudo curl -sL https://firebase.tools | bash');  
 
   let lsbRelease : string = '';

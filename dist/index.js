@@ -1336,7 +1336,8 @@ function setupAndroid(version) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('=== installing prerequisites ===');
         yield exec.exec('sudo apt-get update');
-        yield exec.exec('sudo apt-get install -qqy ca-certificates curl nzip python3-cffi apt-transport-https lsb-release');
+        yield exec.exec('sudo apt-get install -qqy ca-certificates curl apt-transport-https');
+        yield exec.exec('sudo apt-get install -qqy unzip python3-cffi lsb-release');
         yield exec.exec('sudo curl -sL https://firebase.tools | bash');
         let lsbRelease = '';
         const lsbReleaseObj = {};
