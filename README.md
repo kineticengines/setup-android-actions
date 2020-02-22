@@ -9,7 +9,7 @@ steps:
 - uses: actions/checkout@v1
 - uses: actions/setup-java@v1
   with:
-    java-version: '12.x'
+    java-version: '8.x'
 - uses: kineticengines/setup-android-actions@mastemaster
   with:
     api-version: '29'
