@@ -4,7 +4,7 @@
   "description": "Android setup for Github Actions",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npx tsc"
+    "build": "npx ncc build src/index.ts"
   },
   "keywords": [
     "android",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.7.4",
+    "@zeit/ncc": "^0.21.1",
     "typescript": "^3.8.2"
   }
 }
