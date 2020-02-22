@@ -46,8 +46,8 @@ export async function setupAndroid(version: string): Promise<void>{
 
   console.log('=== installing gcloud SDK ===');
   await exec.exec('echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list');  
-  await exec.exec(`bash -c "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output key.gpg "`);
-  await exec.exec(`sudo apt-key ${tempDirectory}/add key.gpg`);
+  await exec.exec(`bash -c "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output ${tempDirectory}/key.gpg "`);
+  await exec.exec(`sudo apt-key add ${tempDirectory}/key.gpg`);
   await exec.exec('sudo apt-get update && sudo apt-get install -y google-cloud-sdk');
   await exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
   
