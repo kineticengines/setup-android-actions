@@ -975,7 +975,7 @@ const setup = __importStar(__webpack_require__(526));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const version = core.getInput('api-version') || '';
+            const version = core.getInput('api-version') || '29';
             yield setup.setupAndroid(version);
         }
         catch (error) {
@@ -1313,6 +1313,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const path = __importStar(__webpack_require__(622));
 const exec = __importStar(__webpack_require__(986));
+const core = __importStar(__webpack_require__(470));
 const IS_WINDOWS = process.platform === 'win32';
 const IS_DARWIN = process.platform === 'darwin';
 const IS_LINUX = process.platform === 'linux';
@@ -1330,12 +1331,44 @@ if (!tempDirectory) {
     }
     tempDirectory = path.join(baseLocation, 'actions', 'temp');
 }
+;
 function setupAndroid(version) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('=== installing prerequisites ===');
-        yield exec.exec('apt-get update');
-        yield exec.exec('apt-get install -qqy ca-certificates unzip python3-cffi apt-transport-https lsb-release');
-        yield exec.exec('curl -sL https://firebase.tools | bash');
+        yield exec.exec('sudo apt-get update');
+        yield exec.exec('sudo apt-get install -qqy ca-certificates curl nzip python3-cffi apt-transport-https lsb-release');
+        yield exec.exec('sudo curl -sL https://firebase.tools | bash');
+        let lsbRelease = '';
+        const lsbReleaseObj = {};
+        lsbReleaseObj.listeners = {
+            stdout: (data) => {
+                lsbRelease += data.toString();
+            },
+        };
+        yield exec.exec('lsb_release -c -s', undefined, lsbReleaseObj);
+        core.exportVariable('LSB_RELEASE', lsbRelease);
+        core.exportVariable('CLOUD_SDK_REPO', `cloud-sdk-${lsbRelease}`);
+        console.log('=== installing gcloud SDK ===');
+        yield exec.exec('echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list');
+        yield exec.exec('curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -');
+        yield exec.exec('sudo apt-get update && sudo apt-get install -y google-cloud-sdk');
+        yield exec.exec('gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true');
+        core.exportVariable('ANDROID_HOME', '/opt/android/sdk');
+        core.exportVariable('SDK_VERSION', 'sdk-tools-linux-4333796.zip');
+        core.exportVariable('ADB_INSTALL_TIMEOUT', '120');
+        yield exec.exec('sudo mkdir -p $ANDROID_HOME');
+        yield exec.exec('curl --silent --show-error --location --fail --retry 3 --output /tmp/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION');
+        yield exec.exec('sudo unzip -q /tmp/$SDK_VERSION -d $ANDROID_HOME && sudo rm /tmp/$ANDROID_HOME');
+        core.addPath('$ANDROID_HOME/emulator');
+        core.addPath('$ANDROID_HOME/tools');
+        core.addPath('$ANDROID_HOME/tools/bin');
+        core.addPath('$ANDROID_HOME/platform-tools');
+        console.log('=== installing android ===');
+        yield exec.exec(`mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg`);
+        yield exec.exec('yes | sdkmanager --licenses && sdkmanager --update');
+        yield exec.exec(`sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" `);
+        yield exec.exec(`sdkmanager "build-tools;${version}.0.0" `);
+        yield exec.exec(`sdkmanager "platforms;android-${version}"`);
     });
 }
 exports.setupAndroid = setupAndroid;

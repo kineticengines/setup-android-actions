@@ -14,3 +14,5 @@ steps:
   with:
     api-version: '29'
 ```
+
+If the `api-version` is not provided, the latest API version will be used. At this time, that is API version 29 (Android 10)
