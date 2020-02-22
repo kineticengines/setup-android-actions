@@ -1354,7 +1354,7 @@ function setupAndroid(version) {
         yield exec.exec('echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list');
         yield exec.exec(`bash -c "curl https://packages.cloud.google.com/apt/doc/apt-key.gpg --output ${tempDirectory}/key.gpg "`);
         yield exec.exec(`sudo apt-key add ${tempDirectory}/key.gpg`);
-        yield exec.exec('bash -c "sudo apt-get update && sudo apt-get install -y google-cloud-sdk "');
+        yield exec.exec('bash -c "sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk "');
         yield exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
         core.exportVariable('ANDROID_HOME', `${tempDirectory}/android/sdk`);
         core.exportVariable('SDK_VERSION', 'sdk-tools-linux-4333796.zip');
@@ -1366,12 +1366,12 @@ function setupAndroid(version) {
         core.addPath('$ANDROID_HOME/tools');
         core.addPath('$ANDROID_HOME/tools/bin');
         core.addPath('$ANDROID_HOME/platform-tools');
-        console.log('=== installing android ===');
-        yield exec.exec(`bash -c "mkdir ${tempDirectory}/.android && echo '### User Sources for Android SDK Manager' > ${tempDirectory}/.android/repositories.cfg"`);
-        yield exec.exec(`bash -c "yes | sdkmanager --licenses && sdkmanager --update"`);
-        yield exec.exec(`bash -c "sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
-        yield exec.exec(`bash -c "sdkmanager "build-tools;${version}.0.0" "`);
-        yield exec.exec(`bash -c "sdkmanager "platforms;android-${version}" "`);
+        console.log('=== installing android SDK ===');
+        yield exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && echo '### User Sources for Android SDK Manager' > ${tempDirectory}/.android/repositories.cfg"`);
+        yield exec.exec(`bash -c "yes | ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses && ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update"`);
+        yield exec.exec(`bash -c "${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
+        yield exec.exec(`bash -c "${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
+        yield exec.exec(`bash -c "${tempDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);
     });
 }
 exports.setupAndroid = setupAndroid;
