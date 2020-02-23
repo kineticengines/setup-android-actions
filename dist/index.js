@@ -1314,6 +1314,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path = __importStar(__webpack_require__(622));
 const exec = __importStar(__webpack_require__(986));
 const core = __importStar(__webpack_require__(470));
+const io = __importStar(__webpack_require__(1));
 const IS_WINDOWS = process.platform === 'win32';
 const IS_DARWIN = process.platform === 'darwin';
 const IS_LINUX = process.platform === 'linux';
@@ -1359,7 +1360,7 @@ function setupAndroid(version) {
         core.exportVariable('ANDROID_HOME', `${tempDirectory}/android/sdk`);
         core.exportVariable('SDK_VERSION', 'sdk-tools-linux-4333796.zip');
         core.exportVariable('ADB_INSTALL_TIMEOUT', '120');
-        yield exec.exec('bash -c "sudo mkdir -p $ANDROID_HOME"');
+        yield io.mkdirP(`${tempDirectory}/android/sdk`);
         yield exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output ${tempDirectory}/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
         yield exec.exec(`bash -c "sudo unzip -q ${tempDirectory}/$SDK_VERSION -d $ANDROID_HOME && sudo rm -rf ${tempDirectory}/$SDK_VERSION "`);
         core.addPath(`${tempDirectory}/android/sdk/tools`);
@@ -1371,6 +1372,7 @@ function setupAndroid(version) {
         // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
         yield exec.exec(`bash -c "yes | sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses"`);
         yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`);
+        yield exec.exec(`bash -c "sudo chmod -x ${tempDirectory}/android/sdk/tools/android"`);
         yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
         yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
         yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);

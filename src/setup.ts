@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as exec from '@actions/exec';
 import * as core from '@actions/core';
+import * as io from '@actions/io';
 
 
 const IS_WINDOWS = process.platform === 'win32';
@@ -55,7 +56,7 @@ export async function setupAndroid(version: string): Promise<void>{
   core.exportVariable('SDK_VERSION','sdk-tools-linux-4333796.zip');
   core.exportVariable('ADB_INSTALL_TIMEOUT','120');
 
-  await exec.exec('bash -c "sudo mkdir -p $ANDROID_HOME"');  
+  await io.mkdirP(`${tempDirectory}/android/sdk`);   
   await exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output ${tempDirectory}/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
   await exec.exec(`bash -c "sudo unzip -q ${tempDirectory}/$SDK_VERSION -d $ANDROID_HOME && sudo rm -rf ${tempDirectory}/$SDK_VERSION "`); 
  
@@ -69,6 +70,7 @@ export async function setupAndroid(version: string): Promise<void>{
   // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
   await exec.exec(`bash -c "yes | sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses"`);  
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`)
+  await exec.exec(`bash -c "sudo chmod -x ${tempDirectory}/android/sdk/tools/android"`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);  
