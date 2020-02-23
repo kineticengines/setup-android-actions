@@ -61,7 +61,7 @@ export async function setupAndroid(version: string): Promise<void>{
   await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android`); 
   await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/.android`); 
   await exec.exec(`bash -c " ls -la ${homeDirectory}/android/sdk/tools/"`)
-  await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository"  "extras;google;m2repository" "extras;google;google_play_services" "`);
+  await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "`);
   await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
   await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);  
   await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager --update "`) 
