@@ -1366,7 +1366,7 @@ function setupAndroid(version) {
         core.addPath('$ANDROID_HOME/tools');
         core.addPath('$ANDROID_HOME/tools/bin');
         core.addPath('$ANDROID_HOME/platform-tools');
-        yield exec.exec(`echo $PATH`);
+        yield exec.exec(`bash -c "echo $PATH" `);
         console.log('=== installing android SDK ===');
         // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
         yield exec.exec(`sdkmanager --list`);

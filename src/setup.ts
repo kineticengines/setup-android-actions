@@ -64,7 +64,7 @@ export async function setupAndroid(version: string): Promise<void>{
   core.addPath('$ANDROID_HOME/tools/bin');
   core.addPath('$ANDROID_HOME/platform-tools');
 
-  await exec.exec(`echo $PATH`);
+  await exec.exec(`bash -c "echo $PATH" `);
   console.log('=== installing android SDK ===');
   // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
   await exec.exec(`sdkmanager --list`);
