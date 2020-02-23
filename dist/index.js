@@ -1318,6 +1318,7 @@ const IS_WINDOWS = process.platform === 'win32';
 const IS_DARWIN = process.platform === 'darwin';
 const IS_LINUX = process.platform === 'linux';
 let homeDirectory = process.env['HOME'] || process.env['USERPROFILE'];
+let user = process.env['USER'];
 ;
 function setupAndroid(version) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -1347,6 +1348,8 @@ function setupAndroid(version) {
         core.exportVariable('SDK_VERSION', 'sdk-tools-linux-4333796.zip');
         core.exportVariable('ADB_INSTALL_TIMEOUT', '120');
         yield io.mkdirP(`${homeDirectory}/android/sdk`);
+        yield exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android/`);
+        yield exec.exec(`bash -c " ls -la ${homeDirectory}/android/"`);
         yield exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output ${homeDirectory}/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
         yield exec.exec(`bash -c "sudo unzip -q ${homeDirectory}/$SDK_VERSION -d $ANDROID_HOME && sudo rm -rf ${homeDirectory}/$SDK_VERSION "`);
         core.addPath(`${homeDirectory}/android/sdk/tools`);
