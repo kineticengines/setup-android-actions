@@ -59,7 +59,6 @@ export async function setupAndroid(version: string): Promise<void>{
   await exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output ${tempDirectory}/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
   await exec.exec(`bash -c "sudo unzip -q ${tempDirectory}/$SDK_VERSION -d $ANDROID_HOME && sudo rm -rf ${tempDirectory}/$SDK_VERSION "`); 
  
-  core.addPath(`${tempDirectory}/android/sdk/emulator`);
   core.addPath(`${tempDirectory}/android/sdk/tools`);
   core.addPath(`${tempDirectory}/android/sdk/tools/bin`);
   core.addPath(`${tempDirectory}/android/sdk/platform-tools`);
@@ -68,10 +67,9 @@ export async function setupAndroid(version: string): Promise<void>{
   await exec.exec(`bash -c "echo $ANDROID_HOME" `);
   console.log('=== installing android SDK ===');
   // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
-  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --list"`);
   await exec.exec(`bash -c "yes | sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses"`);  
-  await exec.exec(`basj -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`)
-  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "emulator" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
+  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`)
+  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);  
 }
