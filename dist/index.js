@@ -1348,8 +1348,6 @@ function setupAndroid(version) {
         core.exportVariable('SDK_VERSION', 'sdk-tools-linux-4333796.zip');
         core.exportVariable('ADB_INSTALL_TIMEOUT', '120');
         yield io.mkdirP(`${homeDirectory}/android/sdk`);
-        yield exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android/`);
-        yield exec.exec(`bash -c " ls -la ${homeDirectory}/android/"`);
         yield exec.exec(`bash -c "curl --silent --show-error --location --fail --retry 3 --output ${homeDirectory}/$SDK_VERSION https://dl.google.com/android/repository/$SDK_VERSION"`);
         yield exec.exec(`bash -c "sudo unzip -q ${homeDirectory}/$SDK_VERSION -d $ANDROID_HOME && sudo rm -rf ${homeDirectory}/$SDK_VERSION "`);
         core.addPath(`${homeDirectory}/android/sdk/tools`);
@@ -1360,6 +1358,7 @@ function setupAndroid(version) {
         console.log('=== installing android SDK ===');
         // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
         yield exec.exec(`bash -c "yes | sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager --licenses"`);
+        yield exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android`);
         yield exec.exec(`bash -c " ls -la ${homeDirectory}/android/sdk/tools/"`);
         yield exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
         yield exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
