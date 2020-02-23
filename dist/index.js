@@ -1371,11 +1371,10 @@ function setupAndroid(version) {
         console.log('=== installing android SDK ===');
         // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
         yield exec.exec(`bash -c "yes | sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses"`);
-        yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`);
-        yield exec.exec(`bash -c "sudo chmod -x ${tempDirectory}/android/sdk/tools/android"`);
-        yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
+        yield exec.exec(`bash -c "sudo chmod u+x ${tempDirectory}/android/sdk/tools/android && sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
         yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
         yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);
+        yield exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`);
     });
 }
 exports.setupAndroid = setupAndroid;

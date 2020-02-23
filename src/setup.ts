@@ -69,9 +69,8 @@ export async function setupAndroid(version: string): Promise<void>{
   console.log('=== installing android SDK ===');
   // await exec.exec(`bash -c "sudo mkdir ${tempDirectory}/.android && sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${tempDirectory}/.android/repositories.cfg"`)
   await exec.exec(`bash -c "yes | sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --licenses"`);  
-  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`)
-  await exec.exec(`bash -c "sudo chmod -x ${tempDirectory}/android/sdk/tools/android"`);
-  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
+  await exec.exec(`bash -c "sudo chmod u+x ${tempDirectory}/android/sdk/tools/android && sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" "extras;google;google_play_services" "`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
   await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);  
+  await exec.exec(`bash -c "sudo ${tempDirectory}/android/sdk/tools/bin/sdkmanager --update "`) 
 }
