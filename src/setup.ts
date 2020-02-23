@@ -26,6 +26,7 @@ interface Options { listeners: {} };
 
 export async function setupAndroid(version: string): Promise<void>{
   console.log('=== installing prerequisites ===');
+  await exec.exec(`bash -c "sudo chmod -R 777 ${tempDirectory} "`)
   await exec.exec('sudo apt-get update');
   await exec.exec('sudo apt-get install -qqy ca-certificates curl apt-transport-https');
   await exec.exec('sudo apt-get install -qqy unzip python3-cffi lsb-release');

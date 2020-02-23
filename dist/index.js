@@ -1335,6 +1335,7 @@ if (!tempDirectory) {
 function setupAndroid(version) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log('=== installing prerequisites ===');
+        yield exec.exec(`bash -c "sudo chmod -R 777 ${tempDirectory} "`);
         yield exec.exec('sudo apt-get update');
         yield exec.exec('sudo apt-get install -qqy ca-certificates curl apt-transport-https');
         yield exec.exec('sudo apt-get install -qqy unzip python3-cffi lsb-release');
