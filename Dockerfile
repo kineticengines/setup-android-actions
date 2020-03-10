@@ -1,5 +1,5 @@
 FROM openjdk:8-jdk-slim
-LABEL DavidDexter "dmwangi@kineticengines.co.ke"
+LABEL DavidDexter "dmwangi@kineticengines.coke"
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \ 
@@ -23,7 +23,6 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
 RUN apt-get update && sudo apt-get install -y google-cloud-sdk && \
-    gcloud config set core/disable_usage_reporting true && \
     gcloud config set component_manager/disable_update_check true
 
 # clean-up unused packages
@@ -60,10 +59,12 @@ RUN sdkmanager \
 # API_LEVEL string gets replaced by m4
 RUN sdkmanager "platforms;android-29"
 
-## install flutter
-RUN git clone --single-branch --branch beta https://github.com/flutter/flutter.git /opt/flutter/
-ENV PATH="$PATH:/opt/flutter/bin"
-RUN flutter upgrade && flutter config --no-analytics
+
+
+# ## install flutter
+# RUN git clone --single-branch --branch beta https://github.com/flutter/flutter.git /opt/flutter/
+# ENV PATH="$PATH:/opt/flutter/bin"
+# RUN flutter upgrade && flutter config --no-analytics
 
 
 
