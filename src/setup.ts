@@ -46,10 +46,8 @@ export async function setupAndroid(version: string): Promise<void>{
   await io.mv(gcloudGPGPath, path.join(homeDirectory, "key.gpg"));
   await exec.exec(`sudo apt-key add ${homeDirectory}/key.gpg`);
   //download gcloud-sdk
-  await exec.exec('bash -c "sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk "');
-  await exec.exec('gcloud --help')
-  await exec.exec('gcloud config set core/disable_usage_reporting true');
-  await exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
+  await exec.exec('bash -c "sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk "'); 
+  await exec.exec('gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true');
   
   //download android sdk
   await io.mkdirP(`${homeDirectory}/android/sdk`);
@@ -74,9 +72,11 @@ export async function setupAndroid(version: string): Promise<void>{
   // await exec.exec(`bash -c "sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${homeDirectory}/.android/repositories.cfg"`);  
 
   await exec.exec(`bash -c "mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg"`); 
-  await exec.exec(`bash -c "sudo ln -s $ANDROID_HOME/tools/bin/sdkmanager /usr/lib/sdkmanager"`);
-  await exec.exec(`bash -c "yes | sudo sdkmanager --list"`); 
-  await exec.exec(`bash -c "yes | sudo sdkmanager --licenses"`);  
+  await exec.exec(`bash -c "sudo ln -s $ANDROID_HOME/tools/bin/sdkmanager /usr/bin/sdkmanager"`);
+  await exec.exec('sdkmanager --list'); 
+  await exec.exec('yes | sdkmanager --licenses'); 
+
+  // await exec.exec(`bash -c "yes | sudo sdkmanager --licenses"`);  
 
 
   // await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android`); 
