@@ -3270,6 +3270,8 @@ function setupAndroid(version) {
         yield exec.exec(`sudo apt-key add ${homeDirectory}/key.gpg`);
         //download gcloud-sdk
         yield exec.exec('bash -c "sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk "');
+        yield exec.exec('gcloud --help');
+        yield exec.exec('gcloud config set core/disable_usage_reporting true');
         yield exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
         //download android sdk
         yield io.mkdirP(`${homeDirectory}/android/sdk`);

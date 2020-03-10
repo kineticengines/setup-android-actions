@@ -47,6 +47,8 @@ export async function setupAndroid(version: string): Promise<void>{
   await exec.exec(`sudo apt-key add ${homeDirectory}/key.gpg`);
   //download gcloud-sdk
   await exec.exec('bash -c "sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk "');
+  await exec.exec('gcloud --help')
+  await exec.exec('gcloud config set core/disable_usage_reporting true');
   await exec.exec(`bash -c "gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true "`);
   
   //download android sdk
