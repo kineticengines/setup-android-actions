@@ -3270,7 +3270,8 @@ function setupAndroid(version) {
         yield exec.exec(`sudo apt-key add ${homeDirectory}/key.gpg`);
         //download gcloud-sdk
         yield exec.exec('bash -c "sudo apt-get update && sudo apt-get install -qqy google-cloud-sdk "');
-        yield exec.exec('gcloud config set core/disable_usage_reporting true && gcloud config set component_manager/disable_update_check true');
+        yield exec.exec('gcloud config set core/disable_usage_reporting true');
+        yield exec.exec('gcloud config set component_manager/disable_update_check true');
         //download android sdk
         yield io.mkdirP(`${homeDirectory}/android/sdk`);
         core.exportVariable('ANDROID_HOME', `${homeDirectory}/android/sdk`);
@@ -3290,11 +3291,9 @@ function setupAndroid(version) {
         yield exec.exec(`bash -c "sudo ln -s $ANDROID_HOME/tools/bin/sdkmanager /usr/bin/sdkmanager"`);
         yield exec.exec('sdkmanager --list');
         yield exec.exec('yes | sdkmanager --licenses');
+        yield exec.exec(`sdkmanager "tools" "platform-tools" "build-tools;${version}.0.0" "platforms;android-${version}" `);
+        yield exec.exec('sdkmanager --update');
         // await exec.exec(`bash -c "yes | sudo sdkmanager --licenses"`);  
-        // await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android`); 
-        // await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/.android`); 
-        // await exec.exec(`bash -c " ls -la ${homeDirectory}/android/sdk/tools/"`);
-        // await exec.exec(`bash -c "sdkmanager --list"`);
         // await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "`);
         // await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
         // await exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);  
