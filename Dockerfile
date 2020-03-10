@@ -65,6 +65,6 @@ RUN git clone --single-branch --branch beta https://github.com/flutter/flutter.g
 ENV PATH="$PATH:/opt/flutter/bin"
 RUN flutter upgrade && flutter config --no-analytics
 
-COPY fls-android /usr/local/bin/
+
 
 
