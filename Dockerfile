@@ -58,14 +58,3 @@ RUN sdkmanager \
 
 # API_LEVEL string gets replaced by m4
 RUN sdkmanager "platforms;android-29"
-
-
-
-# ## install flutter
-# RUN git clone --single-branch --branch beta https://github.com/flutter/flutter.git /opt/flutter/
-# ENV PATH="$PATH:/opt/flutter/bin"
-# RUN flutter upgrade && flutter config --no-analytics
-
-
-
-
