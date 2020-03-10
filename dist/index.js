@@ -1362,6 +1362,7 @@ function setupAndroid(version) {
         yield exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android`);
         yield exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/.android`);
         yield exec.exec(`bash -c " ls -la ${homeDirectory}/android/sdk/tools/"`);
+        yield exec.exec(`bash -c "sdkmanager --list"`);
         yield exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "tools" "platform-tools" "`);
         yield exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "build-tools;${version}.0.0" "`);
         yield exec.exec(`bash -c "sudo ${homeDirectory}/android/sdk/tools/bin/sdkmanager "platforms;android-${version}" "`);
