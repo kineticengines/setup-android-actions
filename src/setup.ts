@@ -51,7 +51,6 @@ export async function setupAndroid(version: string): Promise<void>{
   
   //download android sdk
   await io.mkdirP(`${homeDirectory}/android/sdk`);
-
   core.exportVariable('ANDROID_HOME',`${homeDirectory}/android/sdk`);
   core.exportVariable('SDK_VERSION','sdk-tools-linux-4333796.zip');
   core.exportVariable('ADB_INSTALL_TIMEOUT','120');
@@ -66,17 +65,18 @@ export async function setupAndroid(version: string): Promise<void>{
   core.addPath('$ANDROID_HOME/tools/bin');
   core.addPath('$ANDROID_HOME/platform-tools');
 
-  await exec.exec(`bash -c "echo $PATH" `);
-  await exec.exec(`bash -c "echo $ANDROID_HOME" `);
 
   console.log('=== installing android SDK ===');
   
   // await io.mkdirP(`${homeDirectory}/.android`);
   // await exec.exec(`bash -c "sudo echo '### User Sources for Android SDK Manager' | sudo tee -a ${homeDirectory}/.android/repositories.cfg"`);  
+
   await exec.exec(`bash -c "mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg"`); 
   await exec.exec(`bash -c "sudo ln -s $ANDROID_HOME/tools/bin/sdkmanager /usr/lib/sdkmanager"`);
   await exec.exec(`bash -c "yes | sudo sdkmanager --list"`); 
   await exec.exec(`bash -c "yes | sudo sdkmanager --licenses"`);  
+
+
   // await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/android`); 
   // await exec.exec(`sudo chown -R ${user}:${user} ${homeDirectory}/.android`); 
   // await exec.exec(`bash -c " ls -la ${homeDirectory}/android/sdk/tools/"`);
